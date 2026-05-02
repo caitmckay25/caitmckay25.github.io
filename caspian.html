@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caspian</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --surface3: #222222;
+    --border: #2a2a2a;
+    --border2: #333333;
+    --text: #e8e4dc;
+    --text2: #9a9590;
+    --text3: #5a5650;
+    --accent: #c8a46e;
+    --accent2: #e8c48e;
+    --red: #c85a4a;
+    --green: #6a9e6a;
+    --blue: #5a7a9e;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+
+  .header-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 61px;
+    z-index: 99;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    flex: 0 0 auto;
+    padding: 12px 18px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .nav-btn:hover { color: var(--text2); }
+
+  /* PAGES */
+  .page { display: none; padding: 20px 16px 100px; }
+  .page.active { display: block; }
+
+  /* COMMON */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: var(--surface3);
+    color: var(--text2);
+    margin: 2px 2px 2px 0;
+  }
+  .tag.weapon { background: #1a2a1a; color: var(--green); }
+  .tag.priority { background: #2a1a1a; color: var(--red); }
+  .tag.race { background: #1a1a2a; color: var(--blue); }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 12px 0;
+  }
+
+  /* COUNTDOWN */
+  .countdown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .countdown-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .countdown-days {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .countdown-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .countdown-name {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  /* WEIGHT */
+  .weight-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-num.accent { color: var(--accent); }
+  .stat-num.green { color: var(--green); }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .progress-bar-wrap {
+    background: var(--surface3);
+    border-radius: 2px;
+    height: 6px;
+    margin: 8px 0 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* FORMS */
+  .form-group { margin-bottom: 14px; }
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    display: block;
+    margin-bottom: 6px;
+  }
+  input, textarea, select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  input[type="date"] { color-scheme: dark; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+  }
+  .btn:hover { background: var(--accent2); }
+  .btn.secondary {
+    background: var(--surface3);
+    color: var(--text2);
+    border: 1px solid var(--border2);
+  }
+  .btn.secondary:hover { background: var(--surface2); color: var(--text); }
+  .btn.danger { background: var(--red); color: #fff; }
+
+  /* MOOD BUTTONS */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .mood-btn {
+    padding: 10px 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .mood-btn.selected {
+    background: var(--surface3);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* CHART */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+  }
+  canvas { display: block; max-width: 100%; }
+
+  /* WEIGHT LOG */
+  .log-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-date { color: var(--text3); }
+  .log-weight { color: var(--text); }
+  .log-delta { font-size: 11px; }
+  .log-delta.down { color: var(--green); }
+  .log-delta.up { color: var(--red); }
+  .log-delete {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+  }
+
+  /* WORKOUTS */
+  .workout-day {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .workout-header {
+    background: var(--surface);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .workout-header:hover { background: var(--surface2); }
+  .workout-day-label {
+    font-family: var(--font-display);
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .workout-type {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .workout-chevron {
+    color: var(--text3);
+    font-size: 18px;
+    transition: transform 0.2s;
+  }
+  .workout-chevron.open { transform: rotate(180deg); }
+  .workout-body {
+    display: none;
+    padding: 16px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+  }
+  .workout-body.open { display: block; }
+
+  .exercise-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .exercise-row:last-child { border-bottom: none; }
+  .ex-num {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text3);
+    min-width: 24px;
+    line-height: 1.2;
+  }
+  .ex-name {
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+  }
+  .ex-detail {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+  .ex-note {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* STATIONS */
+  .station-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .station-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+  }
+  .station-num {
+    font-family: var(--font-display);
+    font-size: 36px;
+    color: var(--border2);
+    line-height: 1;
+    min-width: 36px;
+  }
+  .station-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    color: var(--text);
+  }
+  .station-dist {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+  .station-weights {
+    padding: 12px 16px;
+    background: var(--surface2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .weight-col { }
+  .weight-col-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .weight-val {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text);
+  }
+  .weight-val.target-weight { color: var(--accent); }
+  .station-note {
+    padding: 8px 16px 12px;
+    font-size: 12px;
+    color: var(--text3);
+    background: var(--surface2);
+    font-style: italic;
+  }
+
+  /* PLAN */
+  .phase-header {
+    padding: 12px 0;
+    margin-bottom: 8px;
+  }
+  .phase-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .phase-dates {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+  .phase-desc {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 6px;
+    line-height: 1.6;
+  }
+
+  .week-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .week-header {
+    background: var(--surface);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .week-header:hover { background: var(--surface2); }
+  .week-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text2);
+    text-transform: uppercase;
+  }
+  .week-dates {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+  .week-body {
+    display: none;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+  }
+  .week-body.open { display: block; }
+  .week-day-row {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .week-day-row:last-child { border-bottom: none; }
+  .week-day-name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .week-day-workout {
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* CHECK-IN LOG */
+  .checkin-entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .checkin-date {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .checkin-mood {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: var(--surface3);
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .checkin-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .checkin-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+  .checkin-stat span { color: var(--text2); }
+  .checkin-notes {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 8px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .checkin-delete {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    float: right;
+    margin-top: -2px;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--accent);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 3px;
+    z-index: 999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* RULE NOTE */
+  .rule-note {
+    background: #1a1000;
+    border: 1px solid #3a2a00;
+    border-radius: 3px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text3);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 380px) {
+    .countdown-days { font-size: 26px; }
+    .stat-num { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">CASPIAN</div>
+    <div class="header-sub">Caitlin · Oct 1 2026 · Mixed Doubles</div>
+  </div>
+  <div style="text-align:right;">
+    <div style="font-family:var(--font-display);font-size:22px;color:var(--accent)" id="headerCountdown">—</div>
+    <div style="font-family:var(--font-mono);font-size:9px;color:var(--text3);letter-spacing:1px">DAYS OUT</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('today')">Today</button>
+  <button class="nav-btn" onclick="showPage('plan')">Plan</button>
+  <button class="nav-btn" onclick="showPage('workouts')">Workouts</button>
+  <button class="nav-btn" onclick="showPage('stations')">Stations</button>
+  <button class="nav-btn" onclick="showPage('weight')">Weight</button>
+  <button class="nav-btn" onclick="showPage('checkin')">Check-In</button>
+</nav>
+
+<!-- TODAY -->
+<div id="page-today" class="page active">
+  <div class="countdown-grid">
+    <div class="countdown-card">
+      <div class="countdown-days" id="cd-ottawa">—</div>
+      <div class="countdown-name">Ottawa</div>
+      <div class="countdown-label">May 15</div>
+    </div>
+    <div class="countdown-card">
+      <div class="countdown-days" id="cd-trail">—</div>
+      <div class="countdown-name">Trail</div>
+      <div class="countdown-label">May 22</div>
+    </div>
+    <div class="countdown-card">
+      <div class="countdown-days" id="cd-toronto">—</div>
+      <div class="countdown-name">Toronto</div>
+      <div class="countdown-label">Oct 1</div>
+    </div>
+  </div>
+
+  <div class="section-label">Target</div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">6:00 / KM</div>
+    <div style="color:var(--text2);font-size:13px;line-height:1.6">Consistent. Every run. All 8.<br>
+    Trail 5:45/km already proves the fitness is there.<br>
+    Race day is a pacing and fatigue management problem.</div>
+  </div>
+
+  <div class="section-label">Today's Focus</div>
+  <div id="todayFocus" class="card" style="margin-bottom:20px"></div>
+
+  <div class="section-label">Weight Progress</div>
+  <div class="weight-stats">
+    <div class="stat-box">
+      <div class="stat-num" id="today-current">—</div>
+      <div class="stat-label">Current</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num green" id="today-lost">—</div>
+      <div class="stat-label">Lost</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--text3)" id="today-togo">20</div>
+      <div class="stat-label">To Go</div>
+    </div>
+  </div>
+
+  <div class="rule-note">⚠ Non-negotiable: Calf warm-up before every single session.</div>
+
+  <div class="section-label">Last Check-In</div>
+  <div id="lastCheckin" class="card">
+    <div style="color:var(--text3);font-size:13px">No check-in logged yet.</div>
+  </div>
+</div>
+
+<!-- PLAN -->
+<div id="page-plan" class="page">
+  <div class="phase-header">
+    <div class="phase-title">PHASE 1</div>
+    <div class="phase-dates">June 1 – July 6 · 5 weeks</div>
+    <div class="phase-desc">Base building. Race weight from day one — lunges and wall balls at Mixed Doubles load every session. Aerobic engine first. Calf warm-up non-negotiable.</div>
+  </div>
+
+  <div id="phase1-weeks"></div>
+
+  <div style="border-top:1px solid var(--border);margin:16px 0 8px;padding-top:16px">
+    <div class="phase-title" style="color:var(--text2)">DELOAD</div>
+    <div class="phase-dates">July 7 – 13 · 1 week</div>
+    <div class="phase-desc">Cut volume by 40%. Same movement patterns, lighter load. Sleep, eat, recover. No heroics.</div>
+  </div>
+
+  <div id="deload-weeks"></div>
+
+  <div style="border-top:1px solid var(--border);margin:16px 0 8px;padding-top:16px">
+    <div class="phase-title">PHASE 2</div>
+    <div class="phase-dates">July 14 – Sept 14 · 9 weeks</div>
+    <div class="phase-desc">Race specificity. Running under fatigue. Station-to-station simulation. Partner sessions. Higher intensity, shorter rest. Lunges and wall balls locked in at race weight.</div>
+  </div>
+
+  <div id="phase2-weeks"></div>
+
+  <div style="border-top:1px solid var(--border);margin:16px 0 8px;padding-top:16px">
+    <div class="phase-title" style="color:var(--text2)">TAPER</div>
+    <div class="phase-dates">Sept 15 – Oct 1 · 2.5 weeks</div>
+    <div class="phase-desc">One week true taper. Drop volume, keep intensity. Sharpen, don't add. Race simulation only. Trust what you've built.</div>
+  </div>
+
+  <div id="taper-weeks"></div>
+</div>
+
+<!-- WORKOUTS -->
+<div id="page-workouts" class="page">
+  <div class="section-label" style="margin-bottom:16px">4 Core Days + 2 Optional</div>
+
+  <div id="workout-list"></div>
+</div>
+
+<!-- STATIONS -->
+<div id="page-stations" class="page">
+  <div class="section-label" style="margin-bottom:4px">Race Order · Mixed Doubles Weights</div>
+  <div style="font-size:13px;color:var(--text3);margin-bottom:16px">8×1km runs alternating with 8 stations. Wall balls are last — no run after.</div>
+
+  <div class="rule-note">Run 1km → Station → Run 1km → Station... × 8. No run after Wall Balls.</div>
+
+  <div id="station-list"></div>
+</div>
+
+<!-- WEIGHT -->
+<div id="page-weight" class="page">
+  <div class="weight-stats" style="margin-bottom:16px">
+    <div class="stat-box">
+      <div class="stat-num" id="w-current">—</div>
+      <div class="stat-label">Current</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num green" id="w-lost">0</div>
+      <div class="stat-label">Lost</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--text3)" id="w-togo">20</div>
+      <div class="stat-label">To Go</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">180 LBS → 160 LBS</div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent)" id="w-pct">0%</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="w-bar" style="width:0%"></div>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-align:right" id="w-startdate">Start: —</div>
+  </div>
+
+  <div class="chart-wrap">
+    <canvas id="weightChart" height="160"></canvas>
+  </div>
+
+  <div class="section-label" style="margin-top:16px">Log Weight</div>
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label">Date</label>
+      <input type="date" id="w-date">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Weight (lbs)</label>
+      <input type="number" id="w-value" placeholder="e.g. 179.5" step="0.1" min="100" max="300">
+    </div>
+    <button class="btn" onclick="logWeight()">Log It</button>
+  </div>
+
+  <div class="section-label" style="margin-top:16px">History</div>
+  <div id="weight-log" class="card"></div>
+</div>
+
+<!-- CHECK-IN -->
+<div id="page-checkin" class="page">
+  <div class="section-label">Morning Check-In</div>
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label">Date</label>
+      <input type="date" id="ci-date">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">How are you today</label>
+      <div class="mood-grid">
+        <div class="mood-btn" onclick="selectMood(this,'Ready')">Ready</div>
+        <div class="mood-btn" onclick="selectMood(this,'Manageable')">Manageable</div>
+        <div class="mood-btn" onclick="selectMood(this,'Brain fog')">Brain fog</div>
+        <div class="mood-btn" onclick="selectMood(this,'Tired')">Tired</div>
+        <div class="mood-btn" onclick="selectMood(this,'Body off')">Body off</div>
+        <div class="mood-btn" onclick="selectMood(this,'Strong')">Strong</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:12px">GARMIN</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group">
+        <label class="form-label">HRV</label>
+        <input type="number" id="ci-hrv" placeholder="~91 baseline">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Body Battery</label>
+        <input type="number" id="ci-bb" placeholder="0-100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sleep Score</label>
+        <input type="number" id="ci-sleep" placeholder="0-100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Resting HR</label>
+        <input type="number" id="ci-rhr" placeholder="bpm">
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:12px">CRONOMETER — YESTERDAY</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group">
+        <label class="form-label">Calories</label>
+        <input type="number" id="ci-cal" placeholder="2000-2200">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Protein (g)</label>
+        <input type="number" id="ci-pro" placeholder="g">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Carbs (g)</label>
+        <input type="number" id="ci-carb" placeholder="g">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fat (g)</label>
+        <input type="number" id="ci-fat" placeholder="g">
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="form-group">
+      <label class="form-label">Anything I should know</label>
+      <textarea id="ci-notes" placeholder="Pain, energy, something off, something good..."></textarea>
+    </div>
+
+    <button class="btn" onclick="logCheckin()">Log Check-In</button>
+  </div>
+
+  <div class="section-label" style="margin-top:20px">Log History</div>
+  <div id="checkin-log"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────
+const KEY_WEIGHTS = 'caspian_weights_v2';
+const KEY_CHECKINS = 'caspian_checkins_v2';
+
+function getWeights() { try { return JSON.parse(localStorage.getItem(KEY_WEIGHTS)) || []; } catch(e) { return []; } }
+function saveWeights(d) { localStorage.setItem(KEY_WEIGHTS, JSON.stringify(d)); }
+function getCheckins() { try { return JSON.parse(localStorage.getItem(KEY_CHECKINS)) || []; } catch(e) { return []; } }
+function saveCheckins(d) { localStorage.setItem(KEY_CHECKINS, JSON.stringify(d)); }
+
+// ─── NAV ─────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'weight') renderWeight();
+  if (id === 'checkin') renderCheckins();
+  if (id === 'today') renderToday();
+}
+
+// ─── COUNTDOWNS ───────────────────────────────────────────
+function daysUntil(dateStr) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(dateStr + 'T00:00:00');
+  const diff = Math.ceil((target - now) / 86400000);
+  return diff < 0 ? 'DONE' : diff;
+}
+function initCountdowns() {
+  const races = [
+    { id: 'cd-ottawa', date: '2026-05-15' },
+    { id: 'cd-trail', date: '2026-05-22' },
+    { id: 'cd-toronto', date: '2026-10-01' },
+  ];
+  races.forEach(r => {
+    const el = document.getElementById(r.id);
+    if (el) el.textContent = daysUntil(r.date);
+  });
+  const hdr = document.getElementById('headerCountdown');
+  if (hdr) hdr.textContent = daysUntil('2026-10-01');
+}
+
+// ─── TODAY ────────────────────────────────────────────────
+function renderToday() {
+  const weights = getWeights();
+  const start = 180;
+  const goal = 160;
+  if (weights.length > 0) {
+    const sorted = [...weights].sort((a,b) => new Date(a.date)-new Date(b.date));
+    const latest = sorted[sorted.length-1].weight;
+    const lost = Math.max(0, start - latest);
+    const togo = Math.max(0, latest - goal);
+    document.getElementById('today-current').textContent = latest + ' lbs';
+    document.getElementById('today-lost').textContent = lost.toFixed(1) + ' lbs';
+    document.getElementById('today-togo').textContent = togo.toFixed(1);
+  }
+
+  const checkins = getCheckins();
+  const lastCI = document.getElementById('lastCheckin');
+  if (checkins.length > 0) {
+    const sorted = [...checkins].sort((a,b) => new Date(b.date)-new Date(a.date));
+    const c = sorted[0];
+    lastCI.innerHTML = `
+      <div class="checkin-date">${formatDate(c.date)}</div>
+      ${c.mood ? `<div class="checkin-mood">${c.mood}</div>` : ''}
+      <div class="checkin-stats">
+        ${c.hrv ? `<div class="checkin-stat">HRV <span>${c.hrv}</span></div>` : ''}
+        ${c.bb ? `<div class="checkin-stat">Battery <span>${c.bb}</span></div>` : ''}
+        ${c.sleep ? `<div class="checkin-stat">Sleep <span>${c.sleep}</span></div>` : ''}
+        ${c.rhr ? `<div class="checkin-stat">RHR <span>${c.rhr}</span></div>` : ''}
+        ${c.cal ? `<div class="checkin-stat">Cals <span>${c.cal}</span></div>` : ''}
+        ${c.protein ? `<div class="checkin-stat">Protein <span>${c.protein}g</span></div>` : ''}
+      </div>
+      ${c.notes ? `<div class="checkin-notes">${c.notes}</div>` : ''}
+    `;
+  }
+
+  // Today's focus based on day of week
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const today = days[new Date().getDay()];
+  const focusMap = {
+    Monday: { day: 'Day 1', type: 'Zone 2 Run', detail: 'HR and effort zones only. GPS useless on indoor track. 45-60 min easy aerobic. You could hold a conversation.' },
+    Tuesday: { day: 'Day 2', type: 'Hyrox Workout', detail: 'Running under fatigue. Station sequence at race weight. This is the work.' },
+    Wednesday: { day: 'Day 3', type: 'Strength', detail: 'Posterior chain. Race-weight lunges (20kg sandbag). Wall ball mechanics (6kg, 9ft target). Calf warm-up.' },
+    Thursday: { day: 'Day 4', type: 'Intervals + Burpee Broad Jumps', detail: 'Speed work. Build the engine. Burpee broad jump quality — full hip extension, distance per rep.' },
+    Friday: { day: 'Optional Day 5', type: 'Non-Running Cardio', detail: 'Row, ski erg, bike. Your call. Aerobic top-up without leg impact.' },
+    Saturday: { day: 'Optional Day 6', type: 'Partner Session or Recovery', detail: 'Train with your partner or rest fully. Listen to the body.' },
+    Sunday: { day: 'Rest', type: 'Recovery', detail: 'Rest day. Eat well. Sleep. That\'s training too.' },
+  };
+  const f = focusMap[today] || focusMap['Sunday'];
+  document.getElementById('todayFocus').innerHTML = `
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:2px;margin-bottom:6px">${today.toUpperCase()} — ${f.day}</div>
+    <div class="card-title">${f.type}</div>
+    <div style="color:var(--text2);font-size:13px;line-height:1.6">${f.detail}</div>
+  `;
+}
+
+// ─── WORKOUTS ────────────────────────────────────────────
+const workouts = [
+
+  // ══════════════════════════════════════════════════════
+  // DAY 1 — ZONE 2 RUN
+  // ══════════════════════════════════════════════════════
+  {
+    day: 'Day 1',
+    type: 'Zone 2 Run',
+    optional: false,
+    duration: '55–70 min total',
+    sections: [
+      {
+        title: '⚠ Calf Warm-Up — Every Session, No Exceptions',
+        exercises: [
+          { name: 'Standing calf raise — slow tempo', detail: '3 × 20 reps · bodyweight · 3 sec up, 3 sec down, 1 sec pause at top', note: 'Both legs. Full range — heel drops below the step on the way down. Non-negotiable every single session.' },
+          { name: 'Seated calf raise', detail: '2 × 15 reps · plate on knees or bodyweight', note: 'Targets the soleus (deeper calf). Different from standing — both matter for your history.' },
+          { name: 'Ankle circles + active dorsiflexion', detail: '10 circles each direction · both ankles · then 10 heel-to-wall dorsiflexion stretches each', note: '' },
+        ]
+      },
+      {
+        title: 'Activation — 5 min',
+        exercises: [
+          { name: 'Leg swings — front to back', detail: '12 each leg · controlled arc, not momentum', note: '' },
+          { name: 'Leg swings — lateral', detail: '12 each leg', note: '' },
+          { name: 'Glute bridge hold', detail: '2 × 10 sec holds at top · drive heels into floor', note: 'Gets the glutes firing before you run. Matters for calf offloading.' },
+          { name: 'Easy walk → jog build', detail: '2 min walk → 2 min easy jog → pick up to conversational pace', note: '' },
+        ]
+      },
+      {
+        title: 'Zone 2 Run — 45 min (Phase 1) / 60 min (Phase 2)',
+        exercises: [
+          { name: 'Indoor 200m track — continuous', detail: 'HR 130–150 · effort: full sentence out loud · GPS off — HR and feel only', note: 'If HR climbs above 155, walk 60 sec until it drops back, then resume. This is the protocol, not a failure.' },
+          { name: 'Phase 1 (June 1–July 6)', detail: '45 min continuous at HR 130–145', note: 'Building the aerobic engine that sustains 6:00/km after station 5.' },
+          { name: 'Phase 2 (July 14 onward)', detail: 'Build to 60 min continuous · add 5 min every 2 weeks', note: '' },
+          { name: 'Pacing rule', detail: 'Ignore pace entirely. Today is not a pace day. HR and effort are the only numbers that matter.', note: '' },
+        ]
+      },
+      {
+        title: 'Cool-Down — 8 min',
+        exercises: [
+          { name: 'Walk until HR below 115', detail: '2–3 min', note: '' },
+          { name: 'Standing hip flexor stretch', detail: '60 sec each side · low lunge, back knee down, reach overhead', note: '' },
+          { name: 'Seated hamstring stretch', detail: '45 sec each side · straight leg, hinge at hip not waist', note: '' },
+          { name: 'Calf stretch — gastroc', detail: '45 sec each · straight-leg wall press', note: '' },
+          { name: 'Calf stretch — soleus', detail: '45 sec each · bent-knee wall press, heel stays grounded', note: 'Critical given your history. Do both versions every time.' },
+        ]
+      }
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════
+  // DAY 2 — HYROX SESSION (Running Under Fatigue)
+  // ══════════════════════════════════════════════════════
+  {
+    day: 'Day 2',
+    type: 'Hyrox Session — Compromised Running + Stations',
+    optional: false,
+    duration: '75–90 min total',
+    sections: [
+      {
+        title: '⚠ Calf Warm-Up — Non-Negotiable',
+        exercises: [
+          { name: 'Standing calf raise — slow', detail: '3 × 20 · 3 sec up, 3 sec down', note: '' },
+          { name: 'Ankle circles + dorsiflexion', detail: '30 sec each direction both ankles', note: '' },
+          { name: 'Easy jog 400m + 4 strides', detail: 'Strides = 80m accelerating to 85% effort, walk back · primes the engine', note: '' },
+          { name: 'Goblet squat + hip circles', detail: '10 goblet squats with 8kg · 10 hip circles each direction · activate before stations', note: '' },
+        ]
+      },
+      {
+        title: '── PHASE 1 WORKOUT A (Weeks 1–2) · "The Engine" · 60 min',
+        exercises: [
+          { name: 'What this builds', detail: 'Learning to perform stations under running fatigue. The body needs to know what it feels like to lunge and throw balls with burning legs.', note: '' },
+          { name: '4 Rounds for time — rest 2 min between rounds', detail: '', note: '' },
+          { name: '↳ 1km run @ 6:00/km effort (indoor track)', detail: 'HR will hit 160–170. That is correct. Stay controlled.', note: '' },
+          { name: '↳ 500m Row Erg', detail: 'Drive legs first, lean back, pull. Sustainable split — not your PR.', note: 'Weapon. Every metre here transfers to race day.' },
+          { name: '↳ 20 Wall Balls @ 6kg to 9ft target', detail: 'Catch in the squat. Drive through hips. Breathe in squat, out on throw.', note: 'Always last. Practice finishing here.' },
+          { name: 'Record your round times', detail: 'Round 4 should be within 15–20 sec of Round 1. If it isn\'t, you went out too hot.', note: '' },
+        ]
+      },
+      {
+        title: '── PHASE 1 WORKOUT B (Weeks 3–5) · "Weapons + Priority" · 75 min',
+        exercises: [
+          { name: 'Alternate A and B weeks — do not do both in the same week', detail: '', note: '' },
+          { name: '3 Rounds — rest 3 min between rounds', detail: '', note: '' },
+          { name: '↳ 1km run @ 6:00/km', detail: '', note: '' },
+          { name: '↳ 500m Ski Erg', detail: 'Hinge at hip, drive arms down and back, pull chest to handles. Pacing target: what you can hold for 3 min without blowing up.', note: 'Weapon. Station 1 in the race.' },
+          { name: '↳ 1km run @ 6:00/km', detail: '', note: '' },
+          { name: '↳ Sled Push 50m @ 152kg', detail: 'Low hips. Drive through floor. Short powerful steps. 3 deep breaths before you touch the sled.', note: 'Weapon.' },
+          { name: '↳ 1km run @ 6:00/km', detail: '', note: '' },
+          { name: '↳ 20m Sandbag Lunges @ 20kg + 20 Wall Balls @ 6kg', detail: 'No rest between them. Lunges directly into wall balls — that\'s the race.', note: 'PRIORITY pairing. Long lunge stride, tall torso. Then right into wall balls.' },
+          { name: 'Finisher — if anything is left', detail: '2 × 400m run @ 5:45/km · 90 sec rest between', note: '' },
+        ]
+      },
+      {
+        title: '── PHASE 2 WORKOUT C (Weeks 6–9) · "EMOM Engine" · 80 min',
+        exercises: [
+          { name: 'Warm-up as above', detail: '', note: '' },
+          { name: 'Part 1 — 24-min EMOM (Every Minute on the Minute)', detail: '', note: 'This is a James Kelly staple used by top Hyrox coaches. Builds compromised running capacity.' },
+          { name: 'Every 3 min for 24 min (8 rounds):', detail: '', note: '' },
+          { name: '↳ Min 0:00 — 400m run @ race pace (6:00/km)', detail: 'Most athletes hit this in ~2:20–2:30. Use remaining time in the 3-min window to catch breath.', note: '' },
+          { name: '↳ Into: 10 Burpee Broad Jumps immediately after run', detail: 'No rest. Full hip extension. Max distance per rep. Then rest until next 3-min mark.', note: 'Score = total BBJs completed. Target 80+ across 8 rounds.' },
+          { name: 'Part 2 — Station Block (after 5 min rest)', detail: '', note: '' },
+          { name: '3 Rounds — rest 90 sec between', detail: '', note: '' },
+          { name: '↳ Sled Pull 50m @ 103kg', detail: 'Hinge, hand-over-hand pull, walk back fast', note: 'Weapon.' },
+          { name: '↳ Farmers Carry 100m @ 2×24kg', detail: 'Shoulders packed, posture tall, grip tight', note: '' },
+          { name: '↳ 30 Wall Balls @ 6kg', detail: 'After carry. Your arms are already loaded. This is the point.', note: '' },
+        ]
+      },
+      {
+        title: '── PHASE 2 WORKOUT D (Weeks 10–14) · "Race Simulation Block" · 90 min',
+        exercises: [
+          { name: 'Alternate C and D through Phase 2', detail: '', note: '' },
+          { name: 'Part 1 — 30-min AMRAP (As Many Rounds As Possible)', detail: 'Record total rounds. Same workout every 3 weeks — track your progression.', note: '' },
+          { name: '↳ 400m run @ race pace', detail: '', note: '' },
+          { name: '↳ 500m Row', detail: '', note: '' },
+          { name: '↳ 25m Sandbag Lunges @ 20kg', detail: '', note: '' },
+          { name: '↳ 15 Wall Balls @ 6kg', detail: '', note: '' },
+          { name: 'Part 2 — Weapons Block (after 5 min rest)', detail: '', note: '' },
+          { name: '4 Rounds — rest 2 min between', detail: '', note: '' },
+          { name: '↳ 500m Ski Erg', detail: '', note: '' },
+          { name: '↳ Sled Push 50m @ 152kg', detail: '', note: '' },
+          { name: '↳ 400m run @ 5:45/km', detail: 'Run AFTER sleds. This is race order. Your legs will hate you. Good.', note: '' },
+        ]
+      },
+      {
+        title: 'Cool-Down — Every Session',
+        exercises: [
+          { name: 'Walk 3 min', detail: 'HR below 120', note: '' },
+          { name: 'Hip flexor stretch', detail: '60 sec each side', note: '' },
+          { name: 'Figure 4 glute stretch', detail: '60 sec each side', note: '' },
+          { name: 'Calf stretch — gastroc + soleus both sides', detail: '45 sec each version', note: '' },
+        ]
+      }
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════
+  // DAY 3 — STRENGTH
+  // ══════════════════════════════════════════════════════
+  {
+    day: 'Day 3',
+    type: 'Strength — Posterior Chain + Race Priority Stations',
+    optional: false,
+    duration: '70–80 min total',
+    sections: [
+      {
+        title: '⚠ Calf Warm-Up — Non-Negotiable',
+        exercises: [
+          { name: 'Standing calf raise', detail: '3 × 20 · slow tempo · full range', note: '' },
+          { name: 'Seated calf raise', detail: '2 × 15', note: '' },
+          { name: 'Ankle mobility drill', detail: '10 reps each ankle · heel-to-wall dorsiflexion', note: '' },
+        ]
+      },
+      {
+        title: 'General Warm-Up — 8 min',
+        exercises: [
+          { name: 'Hip circle + leg swing circuit', detail: '10 reps each movement · front/back, lateral, circles', note: '' },
+          { name: 'Banded lateral walk', detail: '2 × 15 steps each direction · light band above knees', note: 'Glute med activation. Protects knees under lunge load.' },
+          { name: 'Goblet squat — light', detail: '2 × 10 reps · 8–10kg kettlebell · slow descent, pause at bottom', note: 'Gets the squat pattern warmed up for wall balls and lunges.' },
+        ]
+      },
+      {
+        title: 'Block A — Posterior Chain Strength (30 min)',
+        exercises: [
+          { name: 'Romanian Deadlift (RDL)', detail: 'Phase 1: 3 × 8 @ 50–55% 1RM · Phase 2: 4 × 6 @ 60–65% 1RM · 2 min rest · hinge from hip, soft knee, bar close to legs', note: 'Foundation of sled pull strength and running power under fatigue. If you don\'t know your 1RM, use the heaviest weight you can do with perfect form for 8 reps.' },
+          { name: 'Barbell or DB Hip Thrust', detail: 'Phase 1: 3 × 12 @ moderate load · Phase 2: 4 × 10 @ heavier load · 90 sec rest · chin tucked, drive heels, full extension at top', note: 'Glute power for sled push and lunge drive. Squeeze hard at the top for 1 sec.' },
+          { name: 'Single-Leg RDL', detail: '3 × 8 each leg · bodyweight or light DB (8–12kg) · 60 sec rest · slow, controlled, feel the hamstring loading', note: 'Unilateral stability. Directly transfers to lunge quality and single-leg running mechanics.' },
+          { name: 'Banded Clamshell or Side-Lying Hip Abduction', detail: '2 × 20 each side · medium band · controlled tempo', note: 'Glute med. Keeps hips level during long lunge sets and late-race running.' },
+        ]
+      },
+      {
+        title: 'Block B — Sandbag Lunges (PRIORITY — Race Weight Every Time)',
+        exercises: [
+          { name: 'RULE: 20kg sandbag across both shoulders — always', detail: 'No lighter substitutions. Your body needs to know this weight.', note: 'Rear knee must clearly touch floor. Stand fully tall between reps. Alternate legs.' },
+          { name: 'Phase 1 (Weeks 1–3): Technique sets', detail: '4 × 20m · rest 2 min · focus on stride length (hip-width foot, long step), upright torso, breathing rhythm', note: 'Longer stride shifts load from quads to glutes/hamstrings. Matters for wall balls after.' },
+          { name: 'Phase 1 (Weeks 4–5): Volume build', detail: '4 × 30m · rest 90 sec · same cues, adding distance', note: '' },
+          { name: 'Phase 2 (Weeks 6–10): Compromised sets', detail: '400m run at 6:00/km effort → immediately 30m lunges → 90 sec rest · 4 rounds', note: 'This is the race. This is how it actually feels. Practice the transition.' },
+          { name: 'Phase 2 (Weeks 11–14): Distance sets', detail: '3 × 50m unbroken · rest 2 min · aiming for consistent stride length throughout', note: '' },
+          { name: 'Accessory: Reverse lunge — bodyweight', detail: '2 × 10 each side · knee tracks over toe, upright chest', note: 'Prehab. Keeps the movement pattern clean without adding load stress.' },
+        ]
+      },
+      {
+        title: 'Block C — Wall Balls (PRIORITY — Last Station Every Session)',
+        exercises: [
+          { name: 'RULE: 6kg ball to 9ft target — always', detail: 'Race weight, race height. No exceptions.', note: 'Stand arm\'s length from wall. Feet shoulder-width, toes slightly out. Catch the ball as you descend into the squat.' },
+          { name: 'Phase 1 (Weeks 1–3): Mechanics', detail: '4 × 15 reps · rest 90 sec · slow and deliberate · full squat depth (hip crease below knee), tall throw', note: 'Inhale on the squat, exhale on the throw. Build the rhythm now.' },
+          { name: 'Phase 1 (Weeks 4–5): Volume build', detail: '4 × 20 reps · rest 90 sec', note: '' },
+          { name: 'Phase 2 (Weeks 6–8): EMOM endurance', detail: '10-min EMOM: 12 reps at the top of every minute · rest remainder of minute', note: '120 total reps in 10 min. Heart rate will climb. This is the point.' },
+          { name: 'Phase 2 (Weeks 9–11): Compromised + paced', detail: '400m run → 25 wall balls unbroken → 90 sec rest · 4 rounds', note: 'Simulating late-race legs. Your technique should hold. If form breaks, you went too fast on the run.' },
+          { name: 'Phase 2 (Weeks 12–14): Race simulation sets', detail: '2 × 50 reps with 60 sec rest between · or 1 × 75 unbroken attempt', note: 'You are training to finish. Aim to never set the ball down.' },
+        ]
+      },
+      {
+        title: 'Cool-Down — 8 min',
+        exercises: [
+          { name: 'Pigeon stretch or figure 4', detail: '90 sec each side', note: 'Glutes will be fatigued. They need this.' },
+          { name: 'Seated forward fold', detail: '60 sec', note: '' },
+          { name: 'Calf stretch — both versions', detail: '45 sec each leg', note: '' },
+        ]
+      }
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════
+  // DAY 4 — INTERVALS + BURPEE BROAD JUMPS
+  // ══════════════════════════════════════════════════════
+  {
+    day: 'Day 4',
+    type: 'Interval Run + Burpee Broad Jump Speed',
+    optional: false,
+    duration: '60–70 min total',
+    sections: [
+      {
+        title: '⚠ Calf Warm-Up — Non-Negotiable',
+        exercises: [
+          { name: 'Standing calf raise', detail: '3 × 20 · full range, slow', note: '' },
+          { name: 'Ankle circles + dorsiflexion', detail: '30 sec each direction', note: '' },
+          { name: 'Easy jog 400m', detail: 'Build gently into warm-up pace', note: '' },
+          { name: 'Strides — 4 × 80m', detail: 'Accelerate smoothly to 85% effort, decelerate — not sprints, not jogs', note: 'Primes the neuromuscular system before intervals.' },
+        ]
+      },
+      {
+        title: 'Interval Run — 400m Repeats',
+        exercises: [
+          { name: 'Target pace', detail: '5:20–5:45 /km effort · HR will hit 165–178 · that is correct', note: 'You ran 5:45 on trail. Race pace is 6:00. These intervals build the buffer so race pace feels controlled.' },
+          { name: 'Phase 1 (Weeks 1–3)', detail: '6 × 400m · 90 sec standing rest between each · 200m track, use effort not GPS', note: '' },
+          { name: 'Phase 1 (Weeks 4–5)', detail: '8 × 400m · 90 sec rest', note: '' },
+          { name: 'Phase 2 (Weeks 6–9)', detail: '8 × 400m · 60 sec rest · harder, less recovery', note: 'This is where the race engine gets built.' },
+          { name: 'Phase 2 (Weeks 10–14)', detail: '6 × 800m · 2 min rest · or 10 × 400m · 75 sec rest · alternate each week', note: '' },
+          { name: 'Recovery between sets', detail: 'Walk or stand — do not jog. Full HR recovery to 140 or below before next rep.', note: '' },
+        ]
+      },
+      {
+        title: 'Burpee Broad Jump Speed Block — PRIORITY (20 min)',
+        exercises: [
+          { name: 'What we are training', detail: 'Max distance per rep. Consistent quality under accumulated fatigue. 80m at race = ~20–26 reps. You need them fast and technically sound.', note: '' },
+          { name: 'Phase 1: Technique + Power', detail: '5 × 6 reps · full rest between sets (2 min) · cue: chest to ground → explosive hip drive → arms pull → land soft, feet hip-width', note: 'Every rep: measure or estimate distance. You want consistent max ground coverage.' },
+          { name: 'Cue — the jump phase', detail: 'After the push-up, snap hips forward, arms drive overhead, jump for distance not height. Land with knees soft.', note: 'Most athletes waste distance by jumping too vertically. Stay long.' },
+          { name: 'Phase 2: Speed + Fatigue', detail: '3 × 10 reps at race speed · 90 sec rest · then immediately 400m run at race pace', note: 'Trains the BBJ-to-run transition. Your lungs are already working.' },
+          { name: 'Phase 2: AMRAP block (once a week)', detail: 'AMRAP 6 min: 5 BBJ + 200m run · rest 3 min · repeat × 2 rounds', note: 'This is the closest sim to what Station 4 actually feels like.' },
+          { name: 'Broad jump without burpee', detail: '3 × 5 standing broad jumps · maximal effort, full arm swing', note: 'Pure power development. Transfers to jump distance in race.' },
+        ]
+      },
+      {
+        title: 'Cool-Down — 8 min',
+        exercises: [
+          { name: 'Walk 3 min', detail: 'HR down', note: '' },
+          { name: 'Hip flexor stretch', detail: '60 sec each side', note: 'Burpees load the hip flexors. These need stretching.' },
+          { name: 'Quad stretch', detail: '45 sec each side', note: '' },
+          { name: 'Calf stretch — both versions', detail: '45 sec each', note: '' },
+        ]
+      }
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════
+  // DAY 5 — OPTIONAL: CARDIO MACHINE SESSION
+  // ══════════════════════════════════════════════════════
+  {
+    day: 'Day 5',
+    type: 'Optional — Cardio Machine Session',
+    optional: true,
+    duration: '40–55 min total',
+    sections: [
+      {
+        title: 'Calf Warm-Up',
+        exercises: [
+          { name: 'Standing calf raise', detail: '2 × 15 · bodyweight', note: '' },
+          { name: 'Ankle circles', detail: '20 sec each direction', note: '' },
+        ]
+      },
+      {
+        title: 'Option A — Row Erg (Recommended)',
+        exercises: [
+          { name: 'Steady state Zone 2', detail: '35–45 min at 2:20–2:35 / 500m split (adjust to keep HR 130–150) · damper 4–5', note: 'Weapon. Every minute on the erg directly translates to race performance. This is free fitness.' },
+          { name: 'Or: Structured row', detail: '5 × (4 min on / 2 min easy) · push to 2:00–2:10/500m on work pieces', note: 'Higher stimulus if you have energy. Builds your split time.' },
+        ]
+      },
+      {
+        title: 'Option B — Ski Erg',
+        exercises: [
+          { name: 'Steady state Zone 2', detail: '30–40 min at consistent pace · HR 130–150 · focus on arm-to-hip drive rhythm', note: 'Weapon. Pacing practice. The ski erg is Station 1 — learn what sustainable feels like.' },
+          { name: 'Or: 8 × 1 min on / 1 min easy', detail: 'Hard on the work pieces. Full rest on easy.', note: '' },
+        ]
+      },
+      {
+        title: 'Option C — Air/Assault Bike',
+        exercises: [
+          { name: 'Steady state', detail: '35–40 min · HR 130–145 · no impact on calves or shins', note: 'Good day-after-hard-session choice. Joint-friendly aerobic top-up.' },
+        ]
+      },
+      {
+        title: 'Cool-Down',
+        exercises: [
+          { name: 'Easy 3 min', detail: 'Bring effort right down', note: '' },
+          { name: 'Calf stretch', detail: '45 sec each leg', note: '' },
+        ]
+      }
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════
+  // DAY 6 — OPTIONAL: PARTNER SESSION
+  // ══════════════════════════════════════════════════════
+  {
+    day: 'Day 6',
+    type: 'Optional — Partner Session or Full Recovery',
+    optional: true,
+    duration: '60–80 min (partner) · 0 min (recovery)',
+    sections: [
+      {
+        title: 'Calf Warm-Up',
+        exercises: [
+          { name: 'Standing calf raise', detail: '2 × 15 · both legs', note: '' },
+          { name: 'Easy 400m jog together', detail: 'Side by side. Easy pace. Talk.', note: '' },
+          { name: '4 × Roxzone tag practice', detail: 'Walk through the handoff. Touch, tag, go. Make it automatic before you add speed.', note: '' },
+        ]
+      },
+      {
+        title: '── PARTNER WORKOUT A (Phase 1 · Weeks 1–4) · "Meet Your Partner" · 60 min',
+        exercises: [
+          { name: 'Purpose', detail: 'Establish baseline. Find your rhythm together. Figure out who does what.', note: '' },
+          { name: 'Both run 1km together @ comfortable pace', detail: 'Not race pace. Just moving together. Notice who dictates rhythm.', note: '' },
+          { name: 'Station Assessment Block — 4 rounds:', detail: 'He does the station while you time + observe. Then you do it. Rest between. Record splits for both.', note: 'You\'re collecting data, not racing each other.' },
+          { name: '↳ Round 1: Ski Erg 500m each', detail: 'Record your split and his. Gap between you = data.', note: '' },
+          { name: '↳ Round 2: Row 500m each', detail: '', note: '' },
+          { name: '↳ Round 3: Sled Push 25m each @ race weight', detail: 'His: 152kg. Yours: 152kg. (Mixed Doubles — you both push same weight.)', note: '' },
+          { name: '↳ Round 4: Lunges 20m each @ 20kg + 15 Wall Balls each', detail: 'Back-to-back. Record times.', note: '' },
+          { name: 'Roxzone Transition Drill — 10 min', detail: '6 × alternating 200m runs with clean tags in Roxzone · aim for handoff under 5 sec', note: 'ROXBASE data: unpracticed teams lose 2–4 min in transitions across a race. You fix it here.' },
+          { name: 'Debrief', detail: 'Compare splits. Decide preliminary station assignments. Both starting options — work backward from priority stations.', note: '' },
+        ]
+      },
+      {
+        title: '── PARTNER WORKOUT B (Phase 2 · Weeks 5–9) · "Race Intensity" · 75 min',
+        exercises: [
+          { name: 'Purpose', detail: 'Both athletes executing at race effort. Transitions under fatigue. Pacing calibration.', note: '' },
+          { name: 'Both run 1km together @ 6:00/km', detail: 'Race pace. This is the joint run format — doubles athletes run every km together.', note: '' },
+          { name: '4-Station Alternating Block — 2 rounds (race order):', detail: 'He does station → you rest (active — watch, count, coach) → you do next station → he rests → both run 1km → repeat', note: '' },
+          { name: '↳ Station A: Ski Erg 500m', detail: 'He goes. You observe his form. Give one cue when he\'s done.', note: '' },
+          { name: '↳ Station B: Sled Push 50m', detail: 'You go. He watches.', note: '' },
+          { name: '↳ Run 1km together', detail: '6:00/km. His job is to keep pace manageable for you, not to push his ceiling.', note: '' },
+          { name: '↳ Station C: Row 500m', detail: 'He goes.', note: '' },
+          { name: '↳ Station D: Sandbag Lunges 25m + 20 Wall Balls', detail: 'You go. No break between the two.', note: '' },
+          { name: 'Pacing calibration — 5 min debrief', detail: 'Both compare HR at the end of each km run. If his HR is 145 and yours is 170 at same pace — that\'s the data. Race run pace is set at YOUR comfortable ceiling, not his.', note: '' },
+          { name: 'Transition drill — speed under fatigue', detail: '6 × full-speed Roxzone tags after stations · aim for every handoff under 5 sec · this is when mistakes happen — train it fatigued', note: '' },
+        ]
+      },
+      {
+        title: '── PARTNER WORKOUT C (Phase 3 · Weeks 10–14) · "Full Sim" · 80 min',
+        exercises: [
+          { name: 'Purpose', detail: 'Complete race simulation. Every station. Every run. Timed. This is the test.', note: '' },
+          { name: 'Full race format — alternating, race weight, race pace', detail: '8 × 1km runs together + 8 stations alternating (4 each) · Time the whole thing', note: '' },
+          { name: 'Station assignment locked in by now', detail: 'Know exactly who does what before you start. No decisions during the simulation.', note: '' },
+          { name: 'Communication protocol active', detail: 'Use your agreed signals. "I\'m good." / "I need you to push." / "Hold pace." Drill this so it\'s automatic under noise and fatigue.', note: '' },
+          { name: 'Weight swap drill — sleds', detail: 'Time the plate swap. Target under 15 sec. This is free time. Don\'t give it away.', note: '' },
+          { name: 'Post-sim debrief', detail: 'Review every station split. Every transition time. Where did you lose time? Where did you find it? That\'s the next week\'s training focus.', note: '' },
+        ]
+      },
+      {
+        title: '── OPTION B — Full Recovery (use when body is asking)',
+        exercises: [
+          { name: 'Easy walk 20–30 min', detail: 'No HR target. No pace. Just moving.', note: '' },
+          { name: 'Foam roll — calves, IT band, hip flexors, thoracic', detail: '60 sec slow pressure per spot · calves get extra attention', note: '' },
+          { name: 'This is also training', detail: 'Recovery is where adaptation happens. If HRV is down and fatigue is high — take this option without guilt.', note: '' },
+        ]
+      }
+    ]
+  }
+
+];
+
+function buildWorkouts() {
+  const container = document.getElementById('workout-list');
+  container.innerHTML = '';
+  workouts.forEach((w, i) => {
+    const div = document.createElement('div');
+    div.className = 'workout-day';
+    const sectionsHTML = w.sections.map(s => `
+      <div style="margin-bottom:12px">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">${s.title}</div>
+        ${s.exercises.map((ex, j) => `
+          <div class="exercise-row">
+            <div class="ex-num">${j+1}</div>
+            <div>
+              <div class="ex-name">${ex.name}</div>
+              <div class="ex-detail">${ex.detail}</div>
+              ${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+    div.innerHTML = `
+      <div class="workout-header" onclick="toggleWorkout(this)">
+        <div>
+          <div class="workout-day-label">${w.day}${w.optional ? ' <span style="color:var(--text3);font-size:13px">optional</span>' : ''}</div>
+          <div class="workout-type">${w.type}</div>
+        </div>
+        <div class="workout-chevron">▾</div>
+      </div>
+      <div class="workout-body">${sectionsHTML}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+function toggleWorkout(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.workout-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ─── STATIONS ────────────────────────────────────────────
+const stations = [
+  { num: 1, name: 'Ski Erg', dist: '1000m', mixed: '—', womens: '—', note: 'Weapon. Pacing is everything. Don\'t go out too hot.', tags: ['weapon'] },
+  { num: 2, name: 'Sled Push', dist: '50m', mixed: '152 kg', womens: '102 kg', note: 'Weapon. Low hips, drive through floor.', tags: ['weapon'] },
+  { num: 3, name: 'Sled Pull', dist: '50m', mixed: '103 kg', womens: '78 kg', note: 'Weapon. Hinge, pull, walk it back.', tags: ['weapon'] },
+  { num: 4, name: 'Burpee Broad Jump', dist: '80m', mixed: '—', womens: '—', note: 'Building speed. Full hip extension every rep. Max distance.', tags: [] },
+  { num: 5, name: 'Row Erg', dist: '1000m', mixed: '—', womens: '—', note: 'Weapon. Hold your split. Breathe.', tags: ['weapon'] },
+  { num: 6, name: 'Farmers Carry', dist: '200m', mixed: '2×24 kg', womens: '2×16 kg', note: 'Posture. Shoulders back. Long walk — settle in.', tags: [] },
+  { num: 7, name: 'Sandbag Lunges', dist: '100m', mixed: '20 kg', womens: '10 kg', note: 'DOUBLE the women\'s weight. Priority station. Train at race weight every time.', tags: ['priority'] },
+  { num: 8, name: 'Wall Balls', dist: '100 reps', mixed: '6kg · 9ft', womens: '4kg · 8ft', note: 'LAST STATION. No run after. Pace to finish strong. Priority station.', tags: ['priority'] },
+];
+
+function buildStations() {
+  const container = document.getElementById('station-list');
+  container.innerHTML = '';
+  stations.forEach(s => {
+    const hasBoth = s.mixed !== '—';
+    const div = document.createElement('div');
+    div.className = 'station-card';
+    div.innerHTML = `
+      <div class="station-header">
+        <div class="station-num">${s.num}</div>
+        <div>
+          <div class="station-name">${s.name}</div>
+          <div class="station-dist">${s.dist}</div>
+          <div style="margin-top:4px">${s.tags.map(t => `<span class="tag ${t}">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+      ${hasBoth ? `
+      <div class="station-weights">
+        <div class="weight-col">
+          <div class="weight-col-label">Mixed Doubles</div>
+          <div class="weight-val target-weight">${s.mixed}</div>
+        </div>
+        <div class="weight-col">
+          <div class="weight-col-label">Women's</div>
+          <div class="weight-val">${s.womens}</div>
+        </div>
+      </div>` : ''}
+      <div class="station-note">${s.note}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ─── PLAN ────────────────────────────────────────────────
+function addWeeks(start, count) {
+  const weeks = [];
+  let d = new Date(start);
+  for (let i = 0; i < count; i++) {
+    const ws = new Date(d);
+    const we = new Date(d); we.setDate(we.getDate() + 6);
+    weeks.push({ num: i+1, start: ws, end: we });
+    d.setDate(d.getDate() + 7);
+  }
+  return weeks;
+}
+
+const phase1Days = [
+  { name: 'Mon', workout: 'Zone 2 Run — 45 min, HR 130-150, indoor track' },
+  { name: 'Tue', workout: 'Hyrox Workout — run + station rotation, race weight' },
+  { name: 'Wed', workout: 'Strength — posterior chain, 20kg lunges, 6kg wall balls' },
+  { name: 'Thu', workout: 'Intervals — 6×400m @ 5:30-5:45/km + Burpee Broad Jumps' },
+  { name: 'Fri', workout: 'Optional: Non-running cardio (row, ski, bike)' },
+  { name: 'Sat', workout: 'Optional: Partner session or full recovery' },
+  { name: 'Sun', workout: 'Rest' },
+];
+
+const phase2Days = [
+  { name: 'Mon', workout: 'Zone 2 Run — 60 min, HR 130-150' },
+  { name: 'Tue', workout: 'Hyrox Workout — running under fatigue, full race simulation blocks' },
+  { name: 'Wed', workout: 'Strength — progressive overload, 20kg lunges, 6kg wall balls' },
+  { name: 'Thu', workout: 'Intervals — 8-10×400m + Burpee Broad Jump speed work' },
+  { name: 'Fri', workout: 'Optional: Non-running cardio' },
+  { name: 'Sat', workout: 'Optional: Partner session (Mixed Doubles handoff practice)' },
+  { name: 'Sun', workout: 'Rest' },
+];
+
+const taperDays = [
+  { name: 'Mon', workout: 'Easy Zone 2 — 30 min only' },
+  { name: 'Tue', workout: 'Race simulation — short, sharp, race pace only' },
+  { name: 'Wed', workout: 'Mobility + light activation' },
+  { name: 'Thu', workout: 'Short intervals — 4×400m, feel fast' },
+  { name: 'Fri', workout: 'Rest' },
+  { name: 'Sat', workout: 'Easy walk or very light activity' },
+  { name: 'Sun', workout: 'Rest. Sleep. Eat.' },
+];
+
+function buildWeekCard(week, days, containerId) {
+  const container = document.getElementById(containerId);
+  const card = document.createElement('div');
+  card.className = 'week-card';
+  const dayRows = days.map(d => `
+    <div class="week-day-row">
+      <div class="week-day-name">${d.name}</div>
+      <div class="week-day-workout">${d.workout}</div>
+    </div>
+  `).join('');
+  card.innerHTML = `
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div>
+        <div class="week-title">Week ${week.num}</div>
+        <div class="week-dates">${fmtShort(week.start)} – ${fmtShort(week.end)}</div>
+      </div>
+      <div class="workout-chevron">▾</div>
+    </div>
+    <div class="week-body">${dayRows}</div>
+  `;
+  container.appendChild(card);
+}
+
+function fmtShort(d) {
+  return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+}
+
+function buildPlan() {
+  const p1 = addWeeks('2026-06-01', 5);
+  p1.forEach(w => buildWeekCard(w, phase1Days, 'phase1-weeks'));
+
+  const dl = addWeeks('2026-07-07', 1);
+  dl.forEach(w => buildWeekCard({num: 'Deload', start: w.start, end: w.end}, [
+    { name: 'Mon', workout: 'Zone 2 — 30 min easy only' },
+    { name: 'Tue', workout: 'Light Hyrox — 60% volume, same movement patterns' },
+    { name: 'Wed', workout: 'Mobility + light strength — no max efforts' },
+    { name: 'Thu', workout: 'Easy 20 min jog + burpee broad jumps light' },
+    { name: 'Fri-Sun', workout: 'Rest, sleep, eat well. This is mandatory.' },
+  ], 'deload-weeks'));
+
+  const p2 = addWeeks('2026-07-14', 9);
+  p2.forEach(w => buildWeekCard(w, phase2Days, 'phase2-weeks'));
+
+  const taper = addWeeks('2026-09-15', 2);
+  taper.push({ num: 3, start: new Date('2026-09-29'), end: new Date('2026-10-01') });
+  taper.forEach(w => buildWeekCard(w, taperDays, 'taper-weeks'));
+}
+
+function toggleWeek(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.workout-chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ─── WEIGHT ───────────────────────────────────────────────
+let weightChart = null;
+
+function renderWeight() {
+  const weights = getWeights().sort((a,b) => new Date(a.date)-new Date(b.date));
+  const start = 180; const goal = 160;
+  const log = document.getElementById('weight-log');
+
+  if (weights.length === 0) {
+    document.getElementById('w-current').textContent = '180';
+    log.innerHTML = '<div class="empty">No weights logged yet.</div>';
+    return;
+  }
+
+  const latest = weights[weights.length-1].weight;
+  const lost = Math.max(0, start - latest);
+  const togo = Math.max(0, latest - goal);
+  const pct = Math.min(100, (lost / (start - goal)) * 100);
+
+  document.getElementById('w-current').textContent = latest;
+  document.getElementById('w-lost').textContent = lost.toFixed(1);
+  document.getElementById('w-togo').textContent = togo.toFixed(1);
+  document.getElementById('w-pct').textContent = pct.toFixed(0) + '%';
+  document.getElementById('w-bar').style.width = pct + '%';
+  document.getElementById('w-startdate').textContent = 'Start: ' + formatDate(weights[0].date);
+
+  // Chart
+  const canvas = document.getElementById('weightChart');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth || 300;
+  canvas.width = W * window.devicePixelRatio;
+  canvas.height = 160 * window.devicePixelRatio;
+  canvas.style.height = '160px';
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+  const vals = weights.map(w => w.weight);
+  const min = Math.min(...vals, goal) - 2;
+  const max = Math.max(...vals, start) + 2;
+  const n = weights.length;
+  const padL = 40, padR = 16, padT = 12, padB = 24;
+  const cW = W - padL - padR;
+  const cH = 160 - padT - padB;
+
+  ctx.clearRect(0, 0, W, 160);
+
+  // Grid
+  ctx.strokeStyle = '#2a2a2a';
+  ctx.lineWidth = 1;
+  [start, goal, (start+goal)/2].forEach(v => {
+    const y = padT + cH - ((v - min) / (max - min)) * cH;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cW, y); ctx.stroke();
+    ctx.fillStyle = '#5a5650';
+    ctx.font = '9px DM Mono, monospace';
+    ctx.fillText(v, 2, y + 3);
+  });
+
+  const xPos = i => padL + (n === 1 ? cW/2 : (i / (n-1)) * cW);
+  const yPos = v => padT + cH - ((v - min) / (max - min)) * cH;
+
+  // Goal line
+  ctx.strokeStyle = '#3a6a3a';
+  ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(padL, yPos(goal)); ctx.lineTo(padL + cW, yPos(goal)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Line
+  ctx.strokeStyle = '#c8a46e';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  weights.forEach((w, i) => {
+    i === 0 ? ctx.moveTo(xPos(i), yPos(w.weight)) : ctx.lineTo(xPos(i), yPos(w.weight));
+  });
+  ctx.stroke();
+
+  // Dots
+  weights.forEach((w, i) => {
+    ctx.fillStyle = '#c8a46e';
+    ctx.beginPath(); ctx.arc(xPos(i), yPos(w.weight), 3, 0, Math.PI*2); ctx.fill();
+  });
+
+  // Log list (reversed)
+  const reversed = [...weights].reverse();
+  log.innerHTML = reversed.map((w, i) => {
+    const prev = reversed[i+1];
+    const delta = prev ? (w.weight - prev.weight) : null;
+    const deltaStr = delta === null ? '' : (delta < 0 ? `<span class="log-delta down">▼ ${Math.abs(delta).toFixed(1)}</span>` : delta > 0 ? `<span class="log-delta up">▲ ${delta.toFixed(1)}</span>` : '<span class="log-delta" style="color:var(--text3)">—</span>');
+    return `<div class="log-entry">
+      <span class="log-date">${formatDate(w.date)}</span>
+      <span class="log-weight">${w.weight} lbs</span>
+      ${deltaStr}
+      <button class="log-delete" onclick="deleteWeight('${w.date}')">✕</button>
+    </div>`;
+  }).join('') || '<div class="empty">No entries.</div>';
+}
+
+function logWeight() {
+  const date = document.getElementById('w-date').value;
+  const val = parseFloat(document.getElementById('w-value').value);
+  if (!date || isNaN(val) || val < 100 || val > 300) { showToast('Check those numbers.'); return; }
+  const weights = getWeights().filter(w => w.date !== date);
+  weights.push({ date, weight: val });
+  saveWeights(weights);
+  document.getElementById('w-value').value = '';
+  renderWeight();
+  showToast('Logged.');
+}
+
+function deleteWeight(date) {
+  const weights = getWeights().filter(w => w.date !== date);
+  saveWeights(weights);
+  renderWeight();
+}
+
+// ─── CHECK-IN ────────────────────────────────────────────
+let selectedMood = '';
+function selectMood(el, mood) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = mood;
+}
+
+function logCheckin() {
+  const date = document.getElementById('ci-date').value;
+  if (!date) { showToast('Pick a date.'); return; }
+  const entry = {
+    date,
+    mood: selectedMood,
+    hrv: document.getElementById('ci-hrv').value,
+    bb: document.getElementById('ci-bb').value,
+    sleep: document.getElementById('ci-sleep').value,
+    rhr: document.getElementById('ci-rhr').value,
+    cal: document.getElementById('ci-cal').value,
+    protein: document.getElementById('ci-pro').value,
+    carbs: document.getElementById('ci-carb').value,
+    fat: document.getElementById('ci-fat').value,
+    notes: document.getElementById('ci-notes').value,
+  };
+  const checkins = getCheckins().filter(c => c.date !== date);
+  checkins.push(entry);
+  saveCheckins(checkins);
+  // Reset
+  ['ci-hrv','ci-bb','ci-sleep','ci-rhr','ci-cal','ci-pro','ci-carb','ci-fat'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ci-notes').value = '';
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  selectedMood = '';
+  renderCheckins();
+  showToast('Check-in logged.');
+}
+
+function renderCheckins() {
+  const checkins = getCheckins().sort((a,b) => new Date(b.date)-new Date(a.date));
+  const container = document.getElementById('checkin-log');
+  if (checkins.length === 0) {
+    container.innerHTML = '<div class="empty">No check-ins yet.</div>';
+    return;
+  }
+  container.innerHTML = checkins.map(c => `
+    <div class="checkin-entry">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="checkin-date">${formatDate(c.date)}</div>
+        <button class="checkin-delete" onclick="deleteCheckin('${c.date}')">✕ delete</button>
+      </div>
+      ${c.mood ? `<div class="checkin-mood">${c.mood}</div>` : ''}
+      <div class="checkin-stats">
+        ${c.hrv ? `<div class="checkin-stat">HRV <span>${c.hrv} <small style="color:var(--text3)">(baseline 91)</small></span></div>` : ''}
+        ${c.bb ? `<div class="checkin-stat">Battery <span>${c.bb}</span></div>` : ''}
+        ${c.sleep ? `<div class="checkin-stat">Sleep <span>${c.sleep}</span></div>` : ''}
+        ${c.rhr ? `<div class="checkin-stat">RHR <span>${c.rhr}</span></div>` : ''}
+        ${c.cal ? `<div class="checkin-stat">Cals <span>${c.cal}</span></div>` : ''}
+        ${c.protein ? `<div class="checkin-stat">Protein <span>${c.protein}g</span></div>` : ''}
+        ${c.carbs ? `<div class="checkin-stat">Carbs <span>${c.carbs}g</span></div>` : ''}
+        ${c.fat ? `<div class="checkin-stat">Fat <span>${c.fat}g</span></div>` : ''}
+      </div>
+      ${c.notes ? `<div class="checkin-notes">${c.notes}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function deleteCheckin(date) {
+  const checkins = getCheckins().filter(c => c.date !== date);
+  saveCheckins(checkins);
+  renderCheckins();
+}
+
+// ─── UTILS ───────────────────────────────────────────────
+function formatDate(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─── DEFAULT DATES ───────────────────────────────────────
+function setDefaultDates() {
+  const today = new Date().toISOString().split('T')[0];
+  ['w-date','ci-date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = today;
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+initCountdowns();
+setDefaultDates();
+buildWorkouts();
+buildStations();
+buildPlan();
+renderToday();
+</script>
+</body>
+</html>
